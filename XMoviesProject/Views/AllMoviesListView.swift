@@ -27,7 +27,7 @@ struct AllMoviesListView: View {
                                     }
                             }
                             .sheet(item: $viewModel.detailDiscover) { discover in
-                                MovieDetailView(viewModel: viewModel, originalLanguage: discover.originalLanguage, backdropPath:discover.backdropPath, posterPath: discover.posterPath, title: discover.title, name: discover.originalTitle , voteAvarege: discover.voteAverage, overview: discover.overview, releaseDate: discover.releaseDate)
+                                MovieDetailView(viewModel: viewModel, originalLanguage: discover.originalLanguage, backdropPath:discover.backdropPath, posterPath: discover.posterPath, title: discover.title, name: discover.originalTitle , voteAvarege: discover.voteAverage, overview: discover.overview, releaseDate: discover.releaseDate, genresIDS: discover.genreIDS?.first ?? 000)
                             }
                         }
                     } else {
@@ -39,7 +39,7 @@ struct AllMoviesListView: View {
                                     }
                             }
                             .sheet(item: $viewModel.detailSearch) { search in
-                                MovieDetailView(viewModel: viewModel, originalLanguage: search.originalLanguage, backdropPath:search.backdropPath, posterPath: search.posterPath, title: search.title, name: search.originalTitle , voteAvarege: search.voteAverage, overview: search.overview, releaseDate: search.releaseDate)
+                                MovieDetailView(viewModel: viewModel, originalLanguage: search.originalLanguage, backdropPath:search.backdropPath, posterPath: search.posterPath, title: search.title, name: search.originalTitle , voteAvarege: search.voteAverage, overview: search.overview, releaseDate: search.releaseDate, genresIDS: search.genreIDS?.first ?? 000)
                             }
                         }
                 }

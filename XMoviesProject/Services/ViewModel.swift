@@ -43,7 +43,7 @@ class ViewModel: ObservableObject {
         }
     
     
-    func addMovie(title:String?,id:UUID,voteAverage:Double?,name:String?,originalLanguage:String?,backdropPath:String?,posterPath:String?,overview:String?,releaseDate:String?,isSavedColor:Bool) {
+    func addMovie(title:String?,id:UUID,voteAverage:Double?,name:String?,originalLanguage:String?,backdropPath:String?,posterPath:String?,overview:String?,releaseDate:String?,isSavedColor:Bool,genresIDS:Int) {
         
         let newMovie = MovieEntity(context: container.viewContext)
         newMovie.isSavedColor = isSavedColor
@@ -56,6 +56,7 @@ class ViewModel: ObservableObject {
         newMovie.posterPath = posterPath
         newMovie.overview = overview
         newMovie.releaseDate = releaseDate
+        newMovie.genresIDS = Int64(genresIDS)
         saveData()
     }
     
@@ -74,9 +75,6 @@ class ViewModel: ObservableObject {
             print("ERROR saving. \(error)")
         }
     }
-    
-    @Published private(set) var savedMovie: [SavedMovie] = []
-    @Published var detailSaved: SavedMovie?
     
     @Published var tranding: [ResultTranding] = []
     @Published var detailTrangding: ResultTranding?
