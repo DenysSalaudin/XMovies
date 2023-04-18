@@ -31,17 +31,29 @@ struct AllMoviesListView: View {
                             }
                         }
                     } else {
-                        LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
-                            ForEach(viewModel.searchMovies,id: \.id) { search in
-                                SavedImage_TitleView(posterPath: search.posterPath, voteAverage: search.voteAverage, movieTitle: search.title, movieName: search.originalTitle)
-                                    .onTapGesture {
-                                        viewModel.detailSearch = search
-                                    }
+                        if viewModel.searchMovies.count != 0 {
+                            LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
+                                ForEach(viewModel.searchMovies,id: \.id) { search in
+                                    SavedImage_TitleView(posterPath: search.posterPath, voteAverage: search.voteAverage, movieTitle: search.title, movieName: search.originalTitle)
+                                        .onTapGesture {
+                                            viewModel.detailSearch = search
+                                        }
+                                }
+                                .sheet(item: $viewModel.detailSearch) { search in
+                                    MovieDetailView(viewModel: viewModel, originalLanguage: search.originalLanguage, backdropPath:search.backdropPath, posterPath: search.posterPath, title: search.title, name: search.originalTitle , voteAvarege: search.voteAverage, overview: search.overview, releaseDate: search.releaseDate, genresIDS: search.genreIDS?.first ?? 000)
+                                }
                             }
-                            .sheet(item: $viewModel.detailSearch) { search in
-                                MovieDetailView(viewModel: viewModel, originalLanguage: search.originalLanguage, backdropPath:search.backdropPath, posterPath: search.posterPath, title: search.title, name: search.originalTitle , voteAvarege: search.voteAverage, overview: search.overview, releaseDate: search.releaseDate, genresIDS: search.genreIDS?.first ?? 000)
+                            
+                        } else {
+                            Spacer()
+                            HStack {
+                                Image(systemName: "magnifyingglass")
+                                Text("No result by ''\(viewModel.movieName)''")
                             }
+                            .padding(25)
+                            .font(.headline)
                         }
+                            
                 }
                 }.padding(.horizontal)
         }
