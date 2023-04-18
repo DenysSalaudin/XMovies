@@ -20,21 +20,38 @@ struct ContentView: View {
     var body: some View {
         VStack {
                TopBarView(isEdit: $isEdit)
-          //  Button(action: {viewModel.deleteAll()  }) {
-          //      Image(systemName: "heart.fill")
-          //  }
             TabView(selection: $startingPage) {
-                AllMoviesListView(viewModel: viewModel)
-                    .tabItem {
-                        Image(systemName: "list.and.film")
-                        Text("All movies")
+                if !hasError {
+                    if !isLoading {
+                        AllMoviesListView(viewModel: viewModel)
+                            .tabItem {
+                                Image(systemName: "list.and.film")
+                                Text("All movies")
+                            }
+                            .tag(1)
+                    } else {
+                        ProgressView()
+                            .scaleEffect(2.5)
                     }
-                    .tag(1)
-                RecomendedView(isLoading: $isLoading, viewModel: viewModel)
-                        .tabItem {
-                            Image(systemName: "star.square")
-                            Text("Recomended")
-                        }.tag(2)
+                } else {
+                    Text("Something went wrong")
+                        .font(.headline)
+                }
+                if !hasError {
+                    if !isLoading {
+                        RecomendedView(isLoading: $isLoading, viewModel: viewModel)
+                            .tabItem {
+                                Image(systemName: "star.square")
+                                Text("Recomended")
+                            }.tag(2)
+                    } else {
+                        ProgressView()
+                            .scaleEffect(2.5)
+                    }
+                } else {
+                    Text("Something went wrong")
+                        .font(.headline)
+                }
                 SavedMoviesView(viewModel: viewModel)
                     .onAppear { withAnimation{ isEdit = true 
                         viewModel.isDismiss = true

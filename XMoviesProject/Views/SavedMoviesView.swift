@@ -21,7 +21,7 @@ struct SavedMoviesView: View {
                                 viewModel.detailEntity = item
                             }
                             .sheet(item:$viewModel.detailEntity) { item in
-                                MovieDetailView(viewModel: viewModel, originalLanguage: item.originalLanguage, backdropPath: item.backdropPath, posterPath: item.posterPath, title: item.title, name: item.name, voteAvarege: item.voteAverage, overview: item.overview, releaseDate: item.releaseDate, movie: item)
+                                MovieDetailView(viewModel: viewModel, originalLanguage: item.originalLanguage, backdropPath: item.backdropPath, posterPath: item.posterPath, title: item.title, name: item.name, voteAvarege: item.voteAverage, overview: item.overview, releaseDate: item.releaseDate, genresIDS: Int(item.genresIDS), movie: item)
                             }
                     }
                 }

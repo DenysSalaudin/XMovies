@@ -22,8 +22,67 @@ struct MovieDetailView: View {
     let overview : String?
     let releaseDate: String?
     var id = UUID()
+    var genresIDS : Int
     @State var isSaved : Bool?
     @State var movie = MovieEntity()
+    
+    var genres: String {
+        if genresIDS == 28 {
+            return "Action"
+        }
+        if genresIDS == 12 {
+            return "Adventure"
+        }
+        if genresIDS == 16 {
+            return "Animation"
+        }
+        if genresIDS == 35 {
+            return "Comedy"
+        }
+        if genresIDS == 80 {
+            return "Crime"
+        }
+        if genresIDS == 90 {
+            return "Documentary"
+        }
+        if genresIDS == 18 {
+            return "Drama"
+        }
+        if genresIDS == 10751 {
+            return "Family"
+        }
+        if genresIDS == 14 {
+            return "Fantasy"
+        }
+        if genresIDS == 36 {
+            return "History"
+        }
+        if genresIDS == 27 {
+            return "Horror"
+        }
+        if genresIDS == 10749 {
+            return "Romance"
+        }
+        if genresIDS == 878 {
+            return "Science Fiction"
+        }
+        if genresIDS == 10770 {
+            return "TV Movie"
+        }
+        if genresIDS == 53 {
+            return "Thriller"
+        }
+        if genresIDS == 10752 {
+            return "War"
+        }
+        if genresIDS == 37 {
+            return "Western"
+        }
+        else {
+            return "Unknown"
+        }
+    }
+    
     var body: some View {
             ZStack {
                 ScrollView(showsIndicators: false) {
@@ -53,7 +112,7 @@ struct MovieDetailView: View {
                                         if !(isSaved ?? false) {
                                         isSaved = true
                                             if !hasPosterPath  {
-                                                viewModel.addMovie(title: title, id: id, voteAverage: voteAvarege, name: name, originalLanguage: originalLanguage, backdropPath: backdropPath, posterPath: posterPath, overview: overview, releaseDate: releaseDate, isSavedColor: isSaved ?? false)
+                                                viewModel.addMovie(title: title, id: id, voteAverage: voteAvarege, name: name, originalLanguage: originalLanguage, backdropPath: backdropPath, posterPath: posterPath, overview: overview, releaseDate: releaseDate, isSavedColor: isSaved ?? false, genresIDS: genresIDS)
                                             }
                                         } else {
                                             if viewModel.isDismiss {
@@ -96,10 +155,13 @@ struct MovieDetailView: View {
                                 RoundedRectangle(cornerRadius: 12)
                                     .foregroundColor(Color(#colorLiteral(red: 0.2549019608, green: 0.1916709004, blue: 1, alpha: 1)))
                                     .frame(height: 1)
+                                        Text("Genres: \(genres)")
+                                            .font(.headline)
                                         Text("Release: \(releaseDate ?? "")")
                                             .font(.headline)
                                         Text("Language: \(originalLanguage ?? "UnKnown")")
-                                    .font(.headline)
+                                            .font(.headline)
+                     
                             }
                             .onAppear {
                                 if posterPath == viewModel.detailEntity?.posterPath {
@@ -126,7 +188,7 @@ struct MovieDetailView: View {
                                 }
                             }
                             
-                         //  Text("Genres:")
+                         
                          //   Text("Country: \(trandings.originCountry?.first ?? "UnKnown Country")")
                          // Text("Budjet: 300 000 000")
                          //   Text("Status: Released")

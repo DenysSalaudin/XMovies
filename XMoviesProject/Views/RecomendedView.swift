@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct RecomendedView: View {
-   // @State var isSaved = false
     @State private var error: MovieError?
     @State private var baseURL = "https://image.tmdb.org/t/p/w500"
     @Binding var isLoading : Bool
@@ -17,7 +16,6 @@ struct RecomendedView: View {
         ZStack {
             ScrollView(showsIndicators: false) {
                 VStack {
-                   // if isLoading == false {
                         Title(titleName: "Trending")
                         ScrollView(.horizontal,showsIndicators: false) {
                             HStack(alignment: .center) {
@@ -27,7 +25,7 @@ struct RecomendedView: View {
                                             viewModel.detailTrangding = trandings
                                         }
                                         .sheet(item: $viewModel.detailTrangding) { trandings in
-                                                MovieDetailView(viewModel: viewModel, originalLanguage: trandings.originalLanguage, backdropPath:trandings.backdropPath, posterPath: trandings.posterPath, title: trandings.title, name: trandings.name , voteAvarege: trandings.voteAverage, overview: trandings.overview, releaseDate: trandings.releaseDate)
+                                            MovieDetailView(viewModel: viewModel, originalLanguage: trandings.originalLanguage, backdropPath:trandings.backdropPath, posterPath: trandings.posterPath, title: trandings.title, name: trandings.name , voteAvarege: trandings.voteAverage, overview: trandings.overview, releaseDate: trandings.releaseDate, genresIDS: trandings.genreIDS?.first ?? 000)
                                         }
                                 }
                             }.padding(.horizontal)
@@ -41,7 +39,7 @@ struct RecomendedView: View {
                                             viewModel.detailUpComing = upComing
                                         }
                                         .sheet(item: $viewModel.detailUpComing) { upComing in
-                                            MovieDetailView(viewModel: viewModel, originalLanguage: upComing.originalLanguage, backdropPath:upComing.backdropPath, posterPath: upComing.posterPath, title: upComing.title, name: upComing.originalTitle , voteAvarege: upComing.voteAverage, overview: upComing.overview, releaseDate: upComing.releaseDate)
+                                            MovieDetailView(viewModel: viewModel, originalLanguage: upComing.originalLanguage, backdropPath:upComing.backdropPath, posterPath: upComing.posterPath, title: upComing.title, name: upComing.originalTitle , voteAvarege: upComing.voteAverage, overview: upComing.overview, releaseDate: upComing.releaseDate, genresIDS: upComing.genreIDS?.first ?? 000)
                                       }
                                 }
                             }.padding(.horizontal)
@@ -55,7 +53,7 @@ struct RecomendedView: View {
                                             viewModel.detailPopular = popular
                                         }
                                         .sheet(item: $viewModel.detailPopular) { popular in
-                                            MovieDetailView(viewModel: viewModel, originalLanguage: popular.originalLanguage, backdropPath:popular.backdropPath, posterPath: popular.posterPath, title: popular.title, name: popular.originalTitle , voteAvarege: popular.voteAverage, overview: popular.overview, releaseDate: popular.releaseDate)
+                                            MovieDetailView(viewModel: viewModel, originalLanguage: popular.originalLanguage, backdropPath:popular.backdropPath, posterPath: popular.posterPath, title: popular.title, name: popular.originalTitle , voteAvarege: popular.voteAverage, overview: popular.overview, releaseDate: popular.releaseDate, genresIDS: popular.genreIDS?.first ?? 000)
                                         }
                                 }
                             }.padding(.horizontal)
@@ -69,16 +67,11 @@ struct RecomendedView: View {
                                             viewModel.detailNowPlaing = nowPlaying
                                         }
                                         .sheet(item: $viewModel.detailNowPlaing) { nowPlaying in
-                                            MovieDetailView(viewModel: viewModel, originalLanguage: nowPlaying.originalLanguage, backdropPath:nowPlaying.backdropPath, posterPath: nowPlaying.posterPath, title: nowPlaying.title, name: nowPlaying.originalTitle , voteAvarege: nowPlaying.voteAverage, overview: nowPlaying.overview, releaseDate: nowPlaying.releaseDate)
+                                            MovieDetailView(viewModel: viewModel, originalLanguage: nowPlaying.originalLanguage, backdropPath:nowPlaying.backdropPath, posterPath: nowPlaying.posterPath, title: nowPlaying.title, name: nowPlaying.originalTitle , voteAvarege: nowPlaying.voteAverage, overview: nowPlaying.overview, releaseDate: nowPlaying.releaseDate, genresIDS: nowPlaying.genreIDS?.first ?? 000)
                                         }
                                 }
                             }.padding(.horizontal)
                         }
-                  /*  } else {
-                        ProgressView()
-                            .scaleEffect(3)
-                            .padding(70)
-                    }*/
                 }
             }
         }
