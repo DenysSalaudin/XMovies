@@ -22,7 +22,7 @@ struct ResultTranding: Codable,Identifiable {
     let title: String?
     let originalLanguage: String?
     let originalTitle, overview, posterPath: String?
-    let mediaType: MediaType?
+    let mediaType: String?
     let genreIDS: [Int]?
     let popularity: Double?
     let releaseDate: String?
@@ -52,11 +52,6 @@ struct ResultTranding: Codable,Identifiable {
         case firstAirDate = "first_air_date"
         case originCountry = "origin_country"
     }
-}
-
-enum MediaType: String, Codable {
-    case movie = "movie"
-    case tv = "tv"
 }
 
 enum OriginalLanguage: String, Codable {
