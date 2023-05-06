@@ -49,8 +49,3 @@ struct ResultSearch: Codable,Identifiable {
         case voteCount = "vote_count"
     }
 }
-/*
-enum OriginalLanguage: String, Codable {
-    case en = "en"
-}
-*/

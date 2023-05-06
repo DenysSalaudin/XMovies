@@ -10,12 +10,18 @@ import CoreData
 @MainActor
 class ViewModel: ObservableObject {
     
+    let urlCache = URLCache.shared
+    
     let container: NSPersistentContainer
     @Published var isSavedColor: Bool = false
     @Published var savedEntity: [MovieEntity] = []
     @Published var detailEntity: MovieEntity?
     
     init() {
+        let memoryCapacity = 4 * 1024 * 1024 // 4MB
+        let diskCapacity = 20 * 1024 * 1024 // 20MB
+        let urlCache = URLCache(memoryCapacity: memoryCapacity, diskCapacity: diskCapacity, diskPath: nil)
+        URLCache.shared = urlCache
         container = NSPersistentContainer(name: "MovieContainer")
         container.loadPersistentStores { description, error in
             if let error = error {
@@ -42,9 +48,7 @@ class ViewModel: ObservableObject {
               _ = try? container.viewContext.execute(batchDeleteRequest1)
         }
     
-    
     func addMovie(title:String?,id:UUID,voteAverage:Double?,name:String?,originalLanguage:String?,backdropPath:String?,posterPath:String?,overview:String?,releaseDate:String?,isSavedColor:Bool,genresIDS:Int) {
-        
         let newMovie = MovieEntity(context: container.viewContext)
         newMovie.isSavedColor = isSavedColor
         newMovie.title = title
@@ -102,43 +106,94 @@ class ViewModel: ObservableObject {
     var currentPage : Int = 1
     
     func fetchTranding() async throws {
-        let feedURL = URL(string: "https://api.themoviedb.org/3/trending/all/week?api_key=6c3506f531dc061ae20c6ea335446e36")!
-        let (data,_) = try await URLSession.shared.data(from: feedURL)
+        let feedUrl = URL(string: "https://api.themoviedb.org/3/trending/all/week?api_key=6c3506f531dc061ae20c6ea335446e36")!
+        // Check cache
+        if let cachedResponse = urlCache.cachedResponse(for: URLRequest(url: feedUrl)) {
+            let allData = try JSONDecoder().decode(Trending.self, from: cachedResponse.data)
+            self.tranding = allData.results ?? []
+            return
+        }
+        // Make network request
+        let (data,response) = try await URLSession.shared.data(from: feedUrl)
+        // Cache response
+        let cachedResponse = CachedURLResponse(response: response, data: data)
+        urlCache.storeCachedResponse(cachedResponse, for: URLRequest(url: feedUrl))
         let allData = try JSONDecoder().decode(Trending.self, from: data)
         self.tranding = allData.results ?? []
+        
     }
     
     func fetchUpComing() async throws {
-        let feedURL = URL(string: "https://api.themoviedb.org/3/movie/upcoming?api_key=6c3506f531dc061ae20c6ea335446e36")!
-        let (data,_) = try await URLSession.shared.data(from: feedURL)
+        let feedUrl = URL(string: "https://api.themoviedb.org/3/movie/upcoming?api_key=6c3506f531dc061ae20c6ea335446e36")!
+        // Check cache
+        if let cachedResponse = urlCache.cachedResponse(for: URLRequest(url: feedUrl)) {
+            let allData = try JSONDecoder().decode(UpComing.self, from: cachedResponse.data)
+            self.upComing = allData.results ?? []
+            return
+        }
+        // Make network request
+        let (data,response) = try await URLSession.shared.data(from: feedUrl)
+        // Cache response
+        let cachedResponse = CachedURLResponse(response: response, data: data)
+        urlCache.storeCachedResponse(cachedResponse, for: URLRequest(url: feedUrl))
         let allData = try JSONDecoder().decode(UpComing.self, from: data)
         self.upComing = allData.results ?? []
     }
     
     func fetchPopular() async throws {
-        let feedURL = URL(string: "https://api.themoviedb.org/3/movie/popular?api_key=6c3506f531dc061ae20c6ea335446e36")!
-        let (data,_) = try await URLSession.shared.data(from: feedURL)
+        let feedUrl = URL(string: "https://api.themoviedb.org/3/movie/popular?api_key=6c3506f531dc061ae20c6ea335446e36")!
+        // Check cache
+        if let cachedResponse = urlCache.cachedResponse(for: URLRequest(url: feedUrl)) {
+            let allData = try JSONDecoder().decode(Popular.self, from: cachedResponse.data)
+            self.popular = allData.results ?? []
+            return
+        }
+        // Make network request
+        let (data,response) = try await URLSession.shared.data(from: feedUrl)
+        // Cache response
+        let cachedResponse = CachedURLResponse(response: response, data: data)
+        urlCache.storeCachedResponse(cachedResponse, for: URLRequest(url: feedUrl))
         let allData = try JSONDecoder().decode(Popular.self, from: data)
         self.popular = allData.results ?? []
     }
     
     func fetchNowPlaying() async throws {
-        let feedURL = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=6c3506f531dc061ae20c6ea335446e36")!
-        let (data,_) = try await URLSession.shared.data(from: feedURL)
+        let feedUrl = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=6c3506f531dc061ae20c6ea335446e36")!
+        // Check cache
+        if let cachedResponse = urlCache.cachedResponse(for: URLRequest(url: feedUrl)) {
+            let allData = try JSONDecoder().decode(NowPlaying.self, from: cachedResponse.data)
+            self.nowPlaying = allData.results ?? []
+            return
+        }
+        // Make network request
+        let (data,response) = try await URLSession.shared.data(from: feedUrl)
+        // Cache response
+        let cachedResponse = CachedURLResponse(response: response, data: data)
+        urlCache.storeCachedResponse(cachedResponse, for: URLRequest(url: feedUrl))
         let allData = try JSONDecoder().decode(NowPlaying.self, from: data)
         self.nowPlaying = allData.results ?? []
     }
     
     func fetchDiscover() async throws {
-         let feedURL = URL(string: "https://api.themoviedb.org/3/discover/movie?api_key=6c3506f531dc061ae20c6ea335446e36&language=en-US&page=\(currentPage)")!
-         let (data,_) = try await URLSession.shared.data(from: feedURL)
-         let allData = try JSONDecoder().decode(Discover.self, from: data)
-         self.discover = allData.results ?? []
+         let feedUrl = URL(string: "https://api.themoviedb.org/3/discover/movie?api_key=6c3506f531dc061ae20c6ea335446e36&language=en-US&page=\(currentPage)")!
+        // Check cache
+        if let cachedResponse = urlCache.cachedResponse(for: URLRequest(url: feedUrl)) {
+            let allData = try JSONDecoder().decode(Discover.self, from: cachedResponse.data)
+            self.discover = allData.results ?? []
+            return
+        }
+        // Make network request
+        let (data,response) = try await URLSession.shared.data(from: feedUrl)
+        // Cache response
+        let cachedResponse = CachedURLResponse(response: response, data: data)
+        urlCache.storeCachedResponse(cachedResponse, for: URLRequest(url: feedUrl))
+        let allData = try JSONDecoder().decode(Discover.self, from: data)
+        self.discover = allData.results ?? []
      }
 
     func fetchSearch() async throws {
-       guard let feedURL = URL(string: "https://api.themoviedb.org/3/search/movie?api_key=6c3506f531dc061ae20c6ea335446e36&language=en-US&page=1&include_adult=false&query=\(movieName)") else { return }
-        let (data,_) = try await URLSession.shared.data(from: feedURL)
+       guard let feedUrl = URL(string: "https://api.themoviedb.org/3/search/movie?api_key=6c3506f531dc061ae20c6ea335446e36&language=en-US&page=1&include_adult=false&query=\(movieName)") else { return }
+        let (data,_) = try await URLSession.shared.data(from: feedUrl)
         let allData = try JSONDecoder().decode(SearchMovie.self, from: data)
         self.searchMovies = allData.results ?? []
     }

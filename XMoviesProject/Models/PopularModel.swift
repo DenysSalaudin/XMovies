@@ -48,10 +48,4 @@ struct ResultPopular: Codable,Identifiable {
     }
 }
 
-enum OriginalLanguage3: String, Codable {
-    case cn = "cn"
-    case en = "en"
-    case es = "es"
-    case no = "no"
 
-}
