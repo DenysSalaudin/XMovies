@@ -25,7 +25,6 @@ struct MovieDetailView: View {
     var genresIDS : Int
     @State var isSaved : Bool?
     @State var movie = MovieEntity()
-    
     var genres: String {
         if genresIDS == 28 {
             return "Action"
@@ -83,6 +82,7 @@ struct MovieDetailView: View {
         }
     }
     
+
     var body: some View {
             ZStack {
                 ScrollView(showsIndicators: false) {

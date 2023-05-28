@@ -103,10 +103,12 @@ class ViewModel: ObservableObject {
     
     @Published var isDismiss: Bool = false
     
+    let apiKey = "API_Key"
+    
     var currentPage : Int = 1
     
     func fetchTranding() async throws {
-        let feedUrl = URL(string: "https://api.themoviedb.org/3/trending/all/week?api_key=6c3506f531dc061ae20c6ea335446e36")!
+        let feedUrl = URL(string: "https://api.themoviedb.org/3/trending/all/week?api_key=\(apiKey)")!
         // Check cache
         if let cachedResponse = urlCache.cachedResponse(for: URLRequest(url: feedUrl)) {
             let allData = try JSONDecoder().decode(Trending.self, from: cachedResponse.data)
@@ -124,7 +126,7 @@ class ViewModel: ObservableObject {
     }
     
     func fetchUpComing() async throws {
-        let feedUrl = URL(string: "https://api.themoviedb.org/3/movie/upcoming?api_key=6c3506f531dc061ae20c6ea335446e36")!
+        let feedUrl = URL(string: "https://api.themoviedb.org/3/movie/upcoming?api_key=\(apiKey)")!
         // Check cache
         if let cachedResponse = urlCache.cachedResponse(for: URLRequest(url: feedUrl)) {
             let allData = try JSONDecoder().decode(UpComing.self, from: cachedResponse.data)
@@ -141,7 +143,7 @@ class ViewModel: ObservableObject {
     }
     
     func fetchPopular() async throws {
-        let feedUrl = URL(string: "https://api.themoviedb.org/3/movie/popular?api_key=6c3506f531dc061ae20c6ea335446e36")!
+        let feedUrl = URL(string: "https://api.themoviedb.org/3/movie/popular?api_key=\(apiKey)")!
         // Check cache
         if let cachedResponse = urlCache.cachedResponse(for: URLRequest(url: feedUrl)) {
             let allData = try JSONDecoder().decode(Popular.self, from: cachedResponse.data)
@@ -158,7 +160,7 @@ class ViewModel: ObservableObject {
     }
     
     func fetchNowPlaying() async throws {
-        let feedUrl = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=6c3506f531dc061ae20c6ea335446e36")!
+        let feedUrl = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
         // Check cache
         if let cachedResponse = urlCache.cachedResponse(for: URLRequest(url: feedUrl)) {
             let allData = try JSONDecoder().decode(NowPlaying.self, from: cachedResponse.data)
@@ -175,7 +177,7 @@ class ViewModel: ObservableObject {
     }
     
     func fetchDiscover() async throws {
-         let feedUrl = URL(string: "https://api.themoviedb.org/3/discover/movie?api_key=6c3506f531dc061ae20c6ea335446e36&language=en-US&page=\(currentPage)")!
+         let feedUrl = URL(string: "https://api.themoviedb.org/3/discover/movie?api_key=\(apiKey)&language=en-US&page=\(currentPage)")!
         // Check cache
         if let cachedResponse = urlCache.cachedResponse(for: URLRequest(url: feedUrl)) {
             let allData = try JSONDecoder().decode(Discover.self, from: cachedResponse.data)
@@ -192,11 +194,13 @@ class ViewModel: ObservableObject {
      }
 
     func fetchSearch() async throws {
-       guard let feedUrl = URL(string: "https://api.themoviedb.org/3/search/movie?api_key=6c3506f531dc061ae20c6ea335446e36&language=en-US&page=1&include_adult=false&query=\(movieName)") else { return }
+       guard let feedUrl = URL(string: "https://api.themoviedb.org/3/search/movie?api_key=\(apiKey)&language=en-US&page=1&include_adult=false&query=\(movieName)") else { return }
         let (data,_) = try await URLSession.shared.data(from: feedUrl)
         let allData = try JSONDecoder().decode(SearchMovie.self, from: data)
         self.searchMovies = allData.results ?? []
     }
+    
+    
     
 }
 
