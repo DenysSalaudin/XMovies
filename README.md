@@ -7,3 +7,4 @@ The second screen is the search view, where you can search for specific movies b
 
 The last screen is the saved movies view, which stores all the movies you have saved using CoreData. To remove a movie from your saved list, you can simply click the save button again.
 ![Friday, 19 May 2023 16:28:26](https://github.com/DenysSalaudin/XMovies/assets/122059775/9bd58c2f-ab01-45fc-baa8-2d381397689f)
+![Uploading Friday, 19 May 2023 16:29:25.PNG…]()
