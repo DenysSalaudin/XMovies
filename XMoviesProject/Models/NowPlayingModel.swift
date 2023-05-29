@@ -55,7 +55,3 @@ struct ResultNowPlaying: Codable,Identifiable {
     }
 }
 
-enum OriginalLanguage4: String, Codable {
-    case en = "en"
-    case es = "es"
-}

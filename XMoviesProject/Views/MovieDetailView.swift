@@ -161,7 +161,6 @@ struct MovieDetailView: View {
                                             .font(.headline)
                                         Text("Language: \(originalLanguage ?? "UnKnown")")
                                             .font(.headline)
-                     
                             }
                             .onAppear {
                                 if posterPath == viewModel.detailEntity?.posterPath {
